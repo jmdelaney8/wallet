@@ -1,24 +1,21 @@
 from pycoin.key.BIP32Node import BIP32Node
-from pycoin.cmds import ku
-
 from smtplib import SMTP_SSL
 import sqlite3
-
-DB = 'var/wallet_keys.sqlite3'
+from sys import argv
 
 def get_wallet_key_by_email(email):
-    conn = sqlite3.connect(DB)
+    conn = sqlite3.connect('var/wallet_keys.sqlite3')
     c = conn.cursor()
     query = (email, )
     wallet_keys = c.execute('SELECT wallet_key FROM wallet_keys WHERE email=?', query)
     wallet_key = wallet_keys.fetchone()[0]
     conn.close()
     return wallet_key
-    #return 'xprv9s21ZrQH143K2cZXLUxwnVuc1Yt5uXEXGqP1xbei7rXEooe26rcf91gC7yMhFfGuBXHu5rwoXtf69fd2GCPHNY6cE5MFcbVAizwQ2vxoNDx'
+    #return 'xpub661MyMwAqRbcFCfnPWXdSgCTfhXqvkzBRU5wfths7Fnm45ypp2KBFB6UwVdyy4d1rMTuxNRAhaYRRU6oEkzDfujTELLa9MEFyYjXrtuyLRc'
 
 #returns true if the email is not in the database, else false
 def unknown_email(email):
-    conn = sqlite3.connect(DB)
+    conn = sqlite3.connect('var/wallet_keys.sqlite3')
     c = conn.cursor()
     query = (email, )
     c.execute('SELECT email FROM wallet_keys WHERE email=?', query)
@@ -38,25 +35,3 @@ def send_email_to_new_user(email):
     server.login(system_email, "klcfkamvubxpcqit")
     server.sendmail(system_email,email, standard_msg)
     server.quit()
-
-#REQUIRES: database be a the file location of a sqlite3 database   
-#EFFECTS: Returns cursor with which execute() can be used to perform sql queries
-def connect_to_database(database):
-    return sqlite3.connect(database).cursor()
-    
-    
-#REQUIRES: email is not already in the database
-#MODIFIES: adds entry to wallet_key datanase
-#EFFECTS:  Creates new database entry (wallet key, email) and returns the wallet_key
-def create_new_user_and_wallet(email):
-    conn = sqlite3.select(DB)
-    c = conn.cursor()
-    wallet_key = create_wallet_key().hwif(as_private=True)
-    c.execute('INSERT INTO wallet_keys(wallet_key, email) VALUES (wallet_key , email)')
-    conn.close()
-    return wallet_key
-
-#EFFECTS: Creates a new **PRIVATE** wallet key
-def create_wallet_key():
-    wallet = BIP32Node.from_master_secret(ku.get_entropy())
-    return wallet.hwif(as_private=True)
