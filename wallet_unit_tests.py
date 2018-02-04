@@ -32,9 +32,11 @@ class WalletTests(unittest.TestCase):
         if SEND_EMAILS:
             wallet.send_email_to_new_user(email)
 
-    def test_create_wallet_for_new_user(self):
+    def test_create_wallet_for_new_user_and_delete_user_wallets(self):
         wallet.create_new_user_and_wallet(TEST_EMAIL_REC)
         self.assertFalse(wallet.unknown_email(TEST_EMAIL_REC))
+        wallet.delete_user_wallets('deljm@umich.edu')
+        self.assertTrue(wallet.unknown_email(TEST_EMAIL_REC))
     """
     def test_coinbase_tx_to_test_address(self):
         address 

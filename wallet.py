@@ -38,25 +38,36 @@ def send_email_to_new_user(email):
     server.login(system_email, "klcfkamvubxpcqit")
     server.sendmail(system_email,email, standard_msg)
     server.quit()
-
-#REQUIRES: database be a the file location of a sqlite3 database   
-#EFFECTS: Returns cursor with which execute() can be used to perform sql queries
-def connect_to_database(database):
-    return sqlite3.connect(database).cursor()
-    
     
 #REQUIRES: email is not already in the database
 #MODIFIES: adds entry to wallet_key datanase
 #EFFECTS:  Creates new database entry (wallet key, email) and returns the wallet_key
 def create_new_user_and_wallet(email):
-    conn = sqlite3.select(DB)
+    conn = sqlite3.connect(DB)
     c = conn.cursor()
     wallet_key = create_wallet_key().hwif(as_private=True)
-    c.execute('INSERT INTO wallet_keys(wallet_key, email) VALUES (wallet_key , email)')
+    query = [(wallet_key, email),]
+    assert(unknown_email(email))
+    c.executemany('INSERT INTO wallet_keys(wallet_key, email) VALUES (?,?)', query)
+    conn.commit()
+    assert not unknown_email(email), "email and wallet key were not added to database"
     conn.close()
     return wallet_key
 
-#EFFECTS: Creates a new **PRIVATE** wallet key
+#EFFECTS: Creates a new **PRIVATE** wallet key and returns key object
 def create_wallet_key():
     wallet = BIP32Node.from_master_secret(ku.get_entropy())
-    return wallet.hwif(as_private=True)
+    return wallet
+
+#REQUIRES: email be in database
+#MODIFIES: wallet_keys database
+#EFFECTS: removes all the wallets from the database associated with email
+def delete_user_wallets(email):
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    query = (email,)
+    assert(not unknown_email(email))
+    c.execute('DELETE FROM wallet_keys WHERE email=?', query)
+    conn.commit()
+    assert(unknown_email(email))
+    conn.close()
