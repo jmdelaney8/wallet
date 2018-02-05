@@ -27,9 +27,9 @@ class WalletTests(unittest.TestCase):
         conn = sqlite3.connect(path)
         wallet.set_wallet_keys_location(path)
         c = conn.cursor()
-        c.execute('CREATE TABLE wallet_keys(wallet_key VARCHAR(111) NOT NULL, email VARCHAR(40) NOT NULL,PRIMARY KEY(wallet_key))')
+        c.execute('CREATE TABLE wallet_keys(wallet_key BLOB(111) NOT NULL, email VARCHAR(40) NOT NULL,PRIMARY KEY(wallet_key))')
         c.execute("""INSERT INTO wallet_keys(wallet_key, email)""" + 
-                  """VALUES ('xprv9s21ZrQH143K2cZXLUxwnVuc1Yt5uXEXGqP1xbei7rXEooe26rcf91gC7yMhFfGuBXHu5rwoXtf69fd2GCPNY6cE5MFcbVAizwQ2vxoNDx', """+
+                  """VALUES ('xprv9s21ZrQH143K2cZXLUxwnVuc1Yt5uXEXGqP1xbei7rXEooe26rcf91gC7yMhFfGuBXHu5rwoXtf69fd2GCPHNY6cE5MFcbVAizwQ2vxoNDx', """+
                    """'jmdelaney8@gmail.com')""")
         conn.commit()
         conn.close()
@@ -39,11 +39,7 @@ class WalletTests(unittest.TestCase):
     def test_get_wallets_key_by_email(self):
         test_email = TEST_EMAIL
         test_wallet_key = TEST_WALLET_KEY
-        print(test_wallet_key)
-        print(wallet.get_wallet_keys_by_email(test_email)[0])
-        #new_key = wallet.create_wallet_key()
-        #self.assertFalse(intern(new_key) is intern(wallet.gets_wallet_key_by_email(test_email)))
-        self.assertEqual(test_wallet_key, wallet.get_wallet_keys_by_email(test_email))
+        self.assertEqual(test_wallet_key, wallet.get_wallet_keys_by_email(test_email)[0])
 
     def test_unknown_email(self):
         old_email = TEST_EMAIL
