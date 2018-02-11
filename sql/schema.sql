@@ -1,5 +1,11 @@
 CREATE TABLE wallet_keys(
-  accountID INT() PRIMARY KEY,
-  wallet_key VARCHAR(111),
-  email VARCHAR(40) NOT NULL,
+  accountID INTEGER PRIMARY KEY,
+  wallet_key BLOB(111),
+  email VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE utxos(
+  txID INTEGER PRIMARY KEY,
+  tx_hex BLOB(170) NOT NULL,
+  email VARCHAR(40) NOT NULL
 );
