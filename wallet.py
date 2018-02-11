@@ -107,9 +107,17 @@ def account_contains_wallet(email, wallet_key):
     wallet_keys = []
     for result in results:
         wallet_keys.append(result[0])
-
-    print(wallet_key)
-    print(wallet_keys)
     return  wallet_key in wallet_keys
     
     
+#REQUIRES: wallet_key be associated with the account owned by email. email is a known account
+#MODIFIES: wallet_keys
+#EFFECTS: Removes wallet_key from account associated with email
+def remove_wallet(email, wallet_key):
+    conn = sqlite3.connect(WALLET_KEYS)
+    c = conn.cursor()
+    query = (wallet_key,)
+    assert(account_contains_wallet(email, wallet_key))
+    c.execute('DELETE FROM wallet_keys WHERE wallet_key=?', query)
+    conn.commit()
+    conn.close()
