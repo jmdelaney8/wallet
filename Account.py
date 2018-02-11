@@ -143,10 +143,11 @@ class Account:
     #REQUIRES: email not be an email already in the database
     #EFFECTS: Sends the standard new user email to email
     def send_new_account_email(self):
-        system_email = 'jmdelaney8@gmail.com'
+        #system_email = 
         standard_msg = "Hello, you have received money. You can retrieve it at my website"
-        server = SMTP_SSL("smtp.gmail.com", 465)
-        server.login(system_email, "klcfkamvubxpcqit")
+        #TODO: fill with correct test email info
+        #server = SMTP_SSL("smtp.gmail.com", 465)
+        #server.login(system_email,  )
         server.sendmail(system_email, self.email, standard_msg)
         server.quit()
 
