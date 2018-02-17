@@ -1,6 +1,0 @@
-INSERT INTO wallet_keys(wallet_key, email)
-VALUES ('xprv9s21ZrQH143K2cZXLUxwnVuc1Yt5uXEXGqP1xbei7rXEooe26rcf91gC7yMhFfGuBXHu5rwoXtf69fd2GCPHNY6cE5MFcbVAizwQ2vxoNDx', 'cryptowallettest1@gmail.com'), ('xprv9s21ZrQH143K4KyJQSfVvjxgLbBQwZjmvZ9Srno2gLovYoJ7pAuLn48eAsobgzZdY8xtGPb9sVeXn7BCAgRfXoKpJiGsEw7w8AfAdkrb3MT', 'cryptowallettest2@gmail.com');
-
-
-INSERT INTO utxos(tx_hex, email)
-VALUES ('01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff00ffffffff0100f2052a010000001976a914396aa1dc70fe8f72119fbb714978255cb9f4d03d88ac00000000', 'cryptowallettest1@gmail.com');

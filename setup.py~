@@ -1,0 +1,10 @@
+"""wallet python package configuration"""
+
+from setuptools import setup
+
+setup(
+    name='wallet'
+    version='0.1.0'
+    packages=['wallet']
+    include_package_data=True,
+    

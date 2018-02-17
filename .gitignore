@@ -1,4 +1,12 @@
 *.log
 *.db
 *.pyc
+<<<<<<< HEAD
 email_send.py*
+=======
+.DS_Store
+__pycache__/
+env/
+var/
+email_send*
+>>>>>>> fea0b9ec109cdeeaed3f8d8590c2a26f93025054
